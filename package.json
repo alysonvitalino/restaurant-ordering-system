@@ -1,0 +1,39 @@
+{
+  "name": "restaurant-ordering-system",
+  "version": "1.0.0",
+  "description": "Projeto da disciplina de Desenvolvimento Back-end do curso de Engenharia de Software - 4P",
+  "keywords": [
+    "back-end",
+    "ts",
+    "api",
+    "restaurant",
+    "order"
+  ],
+  "homepage": "https://github.com/alysonvitalino/restaurant-ordering-system#readme",
+  "bugs": {
+    "url": "https://github.com/alysonvitalino/restaurant-ordering-system/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alysonvitalino/restaurant-ordering-system.git"
+  },
+  "license": "ISC",
+  "author": "Alyson Hian Clausen Vitalino",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/server.js",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "express": "^5.2.1"
+  }
+}
