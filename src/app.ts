@@ -1,5 +1,6 @@
 import express from "express";
 import { randomUUID } from "node:crypto";
+import supabase from "@supabase/supabase-js";
 
 const app = express();
 
@@ -210,6 +211,12 @@ app.delete("/products/:id", (req, res) => {
   res.status(200).json({
     message: "Produto removido com sucesso.",
   });
+});
+
+app.get("/test-supabase", async (req, res) => {
+  const {data, error} = await supabase
+  .from("categories")
+  .select("*")
 });
 
 export default app;
