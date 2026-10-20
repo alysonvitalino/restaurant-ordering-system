@@ -1,14 +1,20 @@
 import express from "express";
 import { randomUUID } from "node:crypto";
-import supabase from "@supabase/supabase-js";
+import supabase from "./config/supabase.js";
+import category from "./models/Category.js";
+import product from "./models/Product.js";
+import Product from "./models/Product.js";
+import Category from "./models/Category.js";
 
 const app = express();
 
 app.use(express.json());
 
-const pizzaCategoryId = randomUUID();
-const drinkCategoryId = randomUUID();
+/*const pizzaCategoryId = randomUUID();
+const drinkCategoryId = randomUUID();*/
 
+
+//root
 app.get("/", (req, res) => {
   res.status(200).json({
     message: "Restaurant Ordering System API",
@@ -16,6 +22,8 @@ app.get("/", (req, res) => {
   });
 });
 
+//categorias
+/*
 const categories = [
   {
     id: pizzaCategoryId,
@@ -30,6 +38,7 @@ const categories = [
       "Bebidas para acompanhar as pizzas, incluindo refrigerantes, sucos e água.",
   },
 ];
+//produtos
 
 const products = [
   {
@@ -213,10 +222,134 @@ app.delete("/products/:id", (req, res) => {
   });
 });
 
+*/
+app.get("/categories", async (req, res) => {
+  try {
+    const categories = await Category.findAll();
+    res.status(200).json(categories);
+  } catch (error) {
+    console.log("Erro ao buscar categorias: ", error);
+
+    res.status(404).json({
+      message: "Erro ao buscar categorias.",
+    });
+  }
+});
+ 
+app.get("/categories/:id", async (req, res) => {
+  try {
+    const categories = await Category.findById(req.params.id);
+
+    res.status(200).json(categories);
+  } catch (error) {
+    console.log("Erro ao buscar categoria: ", error);
+
+    res.status(404).json({
+      message: "Erro ao buscar categoria.",
+    });
+  }
+});
+
+app.get("/categories/search/:keyword", async (req, res) => {
+  try {
+    const categories = await Category.findByKeyword(req.params.keyword);
+
+    res.status(200).json(categories);
+  } catch (error) {
+    console.log("Erro ao pesquisar categoria: ", error);
+
+    res.status(404).json({
+      message: "Erro ao buscar categoria.",
+    });
+  }
+});
+
+app.put("/categories/:id", async (req, res) => {
+  try {
+    const category = await Category.update(req.params.id, req.body);
+
+    res.status(200).json(category);
+  } catch (error) {
+  console.log("Erro ao atualizar categoria: ", error);
+
+    res.status(404).json({
+      message: "Erro ao atualizar categoria.",
+    });
+  }
+})
+
+app.post("/categories", async (req, res) => {
+  try {
+    const category = await Category.create(req.body);
+    res.status(201).json(product);
+  } catch (error) {
+    console.log("Erro ao criar categoria: ", error);
+
+    res.status(500).json({
+      message: "Erro ao criar categoria.",
+    });
+  }
+});
+
+app.delete("/categories/:id", async (req, res) => {
+  try {
+    const category = await Category.remove(req.params.id);
+
+    res.status(200).json(category);
+  } catch (error) {
+  console.log("Erro ao deletar categoria: ", error);
+
+    res.status(404).json({
+      message: "Erro ao deletar categoria.",
+    });
+  }
+})
+
+
+app.get("/products", async (req, res) => {
+  try {
+    const products = await Product.findAll();
+    res.status(200).json(products);
+  } catch (error) {
+    console.log("Erro ao buscar produtos: ", error);
+
+    res.status(500).json({
+      message: "Erro ao buscar produtos.",
+    });
+  }
+});
+
+app.post("/products", async (req, res) => {
+  try {
+    const product = await Product.create(req.body);
+    res.status(201).json(product);
+  } catch (error) {
+    console.log("Erro ao criar produto: ", error);
+
+    res.status(500).json({
+      message: "Erro ao criar produto.",
+    });
+  }
+});
+
 app.get("/test-supabase", async (req, res) => {
   const {data, error} = await supabase
   .from("categories")
-  .select("*")
+  .select("*");
+  if (error) {
+    console.log("Erro ao consultar Supabase: ", error);
+
+    return res.status(500).json({
+      sucess: false,
+      message: "Erro ao consultar banco de dados",
+      error: error.message,
+    });
+  }
+  res.status(200).json({
+    succes: true,
+    message: "Conexão com Supabase realizada com sucesso!",
+    data,
+  });
 });
 
 export default app;
